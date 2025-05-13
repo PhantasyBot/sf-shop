@@ -1,5 +1,4 @@
 import { Image } from '@studio-freight/compono'
-import { useOutsideClickEvent } from '@studio-freight/hamo'
 import cn from 'clsx'
 import { ScrollableBox } from 'components/scrollable-box'
 import { useStore } from 'lib/store'
@@ -10,6 +9,7 @@ import s from './gallery.module.scss'
 
 export function Gallery() {
   const contentRef = useRef(null)
+  const modalRef = useRef(null)
   const [
     selectedProduct,
     galleryVisible,
@@ -27,7 +27,21 @@ export function Gallery() {
     shallow
   )
 
-  useOutsideClickEvent(contentRef, () => setGalleryVisible(false))
+  // Modified to only close when clicking outside the modal element
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        galleryVisible &&
+        modalRef.current &&
+        !modalRef.current.contains(e.target)
+      ) {
+        setGalleryVisible(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [galleryVisible, setGalleryVisible])
 
   useEffect(() => {
     const keyHandler = (event) => {
@@ -69,7 +83,8 @@ export function Gallery() {
   }, [galleryVisible, selectedProduct, setGalleryVisible])
 
   // Handle navigation
-  const goToPrevImage = () => {
+  const goToPrevImage = (e) => {
+    if (e) e.stopPropagation()
     if (selectedProduct?.images?.length > 1) {
       setSelectedImageIndex(
         selectedImageIndex === 0
@@ -79,7 +94,8 @@ export function Gallery() {
     }
   }
 
-  const goToNextImage = () => {
+  const goToNextImage = (e) => {
+    if (e) e.stopPropagation()
     if (selectedProduct?.images?.length > 1) {
       setSelectedImageIndex(
         selectedImageIndex === selectedProduct.images.length - 1
@@ -96,48 +112,54 @@ export function Gallery() {
 
   return (
     <div className={cn(s.gallery, galleryVisible && s.visible)}>
-      <button className={s.close} onClick={() => setGalleryVisible(false)}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 26 26">
-          <path
-            stroke="var(--green)"
-            d="M11 1H1v10M15 1h10v10M15 25h10V15M11 25H1V15m7.8-6.2 8.4 8.4m0-8.4-8.4 8.4"
-          />
-        </svg>
-        <span className={cn(s.text, 'p-xs text-uppercase')}>Close</span>
-      </button>
-      <div className={s.navigation}>
-        {selectedProduct?.images?.length > 1 && (
-          <>
-            <button className={s.navButton} onClick={goToPrevImage}>
-              <span className="p-xs text-uppercase">Prev</span>
-            </button>
-            <span className={s.counter}>
-              {selectedImageIndex + 1} / {selectedProduct.images.length}
-            </span>
-            <button className={s.navButton} onClick={goToNextImage}>
-              <span className="p-xs text-uppercase">Next</span>
-            </button>
-          </>
-        )}
-      </div>
-      <ScrollableBox className={s.scroller} reset={!galleryVisible}>
-        {selectedProduct && selectedProduct.images && (
-          <div key={'i'} ref={contentRef} className={s.imageContainer}>
-            <Image
-              src={selectedProduct.images[selectedImageIndex]?.src}
-              alt={
-                selectedProduct.images[selectedImageIndex]?.alt ||
-                selectedProduct.name
-              }
-              width={1038}
-              height={611}
-              layout="responsive"
-              objectFit="contain"
-              className={s.fullImage}
+      <div className={s.galleryContent} ref={modalRef}>
+        <button className={s.close} onClick={() => setGalleryVisible(false)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 26 26"
+          >
+            <path
+              stroke="var(--green)"
+              d="M11 1H1v10M15 1h10v10M15 25h10V15M11 25H1V15m7.8-6.2 8.4 8.4m0-8.4-8.4 8.4"
             />
-          </div>
-        )}
-      </ScrollableBox>
+          </svg>
+          <span className={cn(s.text, 'p-xs text-uppercase')}>Close</span>
+        </button>
+        <div className={s.navigation}>
+          {selectedProduct?.images?.length > 1 && (
+            <>
+              <button className={s.navButton} onClick={goToPrevImage}>
+                <span className="p-xs text-uppercase">Prev</span>
+              </button>
+              <span className={s.counter}>
+                {selectedImageIndex + 1} / {selectedProduct.images.length}
+              </span>
+              <button className={s.navButton} onClick={goToNextImage}>
+                <span className="p-xs text-uppercase">Next</span>
+              </button>
+            </>
+          )}
+        </div>
+        <ScrollableBox className={s.scroller} reset={!galleryVisible}>
+          {selectedProduct && selectedProduct.images && (
+            <div key={'i'} ref={contentRef} className={s.imageContainer}>
+              <Image
+                src={selectedProduct.images[selectedImageIndex]?.src}
+                alt={
+                  selectedProduct.images[selectedImageIndex]?.alt ||
+                  selectedProduct.name
+                }
+                width={1038}
+                height={611}
+                layout="responsive"
+                objectFit="contain"
+                className={s.fullImage}
+              />
+            </div>
+          )}
+        </ScrollableBox>
+      </div>
     </div>
   )
 }

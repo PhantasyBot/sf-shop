@@ -19,7 +19,8 @@
   .collectionsSection {
     grid-area: collections;
     border-bottom: 1px solid var(--grey);
-    padding-bottom: desktop-vw(12px);
+    padding-bottom: 0;
+    margin-bottom: 0;
     overflow: visible;
     height: auto;
   }
@@ -27,6 +28,8 @@
   .productsSection {
     grid-area: products;
     height: 100%;
+    padding-top: 0;
+    margin-top: 0;
   }
 
   .detailsSection {

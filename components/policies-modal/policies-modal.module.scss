@@ -1,0 +1,181 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 500ms var(--ease-out-expo),
+    visibility 500ms var(--ease-out-expo);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--black);
+    opacity: 0.8;
+    z-index: -1;
+  }
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.modal {
+  background-color: var(--black);
+  border: 1px solid var(--green);
+  border-radius: desktop-vw(8px);
+  width: 90%;
+  max-width: desktop-vw(1000px);
+  height: 80vh;
+  max-height: desktop-vw(700px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    width: 95%;
+    height: 85vh;
+    max-height: unset;
+  }
+}
+
+.close {
+  position: absolute;
+  top: desktop-vw(16px);
+  right: desktop-vw(16px);
+  width: desktop-vw(24px);
+  height: desktop-vw(24px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+
+  .closeText {
+    display: none;
+  }
+}
+
+.content {
+  display: flex;
+  height: 100%;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: desktop-vw(200px);
+  border-right: 1px solid var(--green);
+  background-color: rgba(var(--green-rgb), 0.1);
+  padding: desktop-vw(60px) 0 desktop-vw(20px);
+
+  @include mobile {
+    flex-direction: row;
+    overflow-x: auto;
+    min-width: unset;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--green);
+    padding: desktop-vw(60px) desktop-vw(16px) desktop-vw(16px);
+  }
+}
+
+.tab {
+  padding: desktop-vw(12px) desktop-vw(20px);
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: var(--green);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: var(--font-secondary);
+  text-transform: uppercase;
+  font-size: desktop-vw(14px);
+
+  &:hover {
+    opacity: 1;
+    background-color: rgba(var(--green-rgb), 0.05);
+  }
+
+  &.active {
+    opacity: 1;
+    background-color: rgba(var(--green-rgb), 0.2);
+    border-left: 3px solid var(--green);
+
+    @include mobile {
+      border-left: none;
+      border-bottom: 3px solid var(--green);
+    }
+  }
+
+  @include mobile {
+    white-space: nowrap;
+    padding: desktop-vw(8px) desktop-vw(16px);
+    font-size: mobile-vw(14px);
+  }
+}
+
+.policyContent {
+  flex: 1;
+  padding: desktop-vw(60px) desktop-vw(30px) desktop-vw(30px);
+  color: var(--white);
+
+  @include mobile {
+    padding: desktop-vw(20px) desktop-vw(16px);
+  }
+}
+
+.policyText {
+  max-width: desktop-vw(750px);
+  margin: 0 auto;
+  font-family: var(--font-primary);
+
+  h2 {
+    font-size: desktop-vw(24px);
+    color: var(--green);
+    margin-bottom: desktop-vw(20px);
+    font-family: var(--font-secondary);
+    text-transform: uppercase;
+    font-weight: 500;
+
+    @include mobile {
+      font-size: mobile-vw(20px);
+      margin-bottom: mobile-vw(16px);
+    }
+  }
+
+  h3 {
+    font-size: desktop-vw(18px);
+    color: var(--green);
+    margin: desktop-vw(24px) 0 desktop-vw(8px);
+    font-family: var(--font-secondary);
+    text-transform: uppercase;
+    font-weight: 500;
+
+    @include mobile {
+      font-size: mobile-vw(16px);
+      margin: mobile-vw(20px) 0 mobile-vw(8px);
+    }
+  }
+
+  p {
+    margin-bottom: desktop-vw(16px);
+    line-height: 1.6;
+    font-size: desktop-vw(16px);
+
+    @include mobile {
+      margin-bottom: mobile-vw(12px);
+      font-size: mobile-vw(14px);
+    }
+  }
+}

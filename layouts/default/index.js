@@ -58,7 +58,7 @@ export function Layout({
       <CustomHead {...seo} />
       <div className={cn(`theme-${theme}`, s.layout, className)}>
         <Header
-          title="MERCHANDISE"
+          title="PHANTASY"
           principles={principles}
           contact={contactData}
           titleClassName="husky-font"

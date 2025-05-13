@@ -1,5 +1,5 @@
 .collectionSelector {
-  padding: desktop-vw(32px) 0 desktop-vw(16px) 0;
+  padding: desktop-vw(32px) 0 0 0;
 
   .title {
     margin-bottom: desktop-vw(16px);
@@ -37,5 +37,6 @@
     background-color: rgba(var(--green-rgb), 0.05);
     max-height: desktop-vw(200px);
     overflow: hidden;
+    margin-bottom: desktop-vw(16px);
   }
 }

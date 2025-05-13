@@ -2,6 +2,11 @@
   width: 100%;
   position: relative;
   z-index: 3;
+  margin-bottom: desktop-vw(24px);
+
+  @include mobile {
+    margin-bottom: mobile-vw(12px);
+  }
 
   .top {
     align-items: center;
@@ -10,7 +15,7 @@
 
     @include desktop {
       padding-top: desktop-vw(16px);
-      padding-bottom: desktop-vw(8px);
+      padding-bottom: desktop-vw(16px);
     }
 
     .eggs {

@@ -1,8 +1,10 @@
 import { Image, Link } from '@studio-freight/compono'
 import { useMediaQuery } from '@studio-freight/hamo'
 import cn from 'clsx'
+import { PoliciesModal } from 'components/policies-modal'
 import { Separator } from 'components/separator'
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import s from './footer.module.scss'
 
 // Import the SVG icons
@@ -17,8 +19,9 @@ const DiscordIcon = dynamic(() => import('icons/pixel-discord.svg'), {
   ssr: false,
 })
 
-export function Footer({ className, style, links, studioInfo }) {
+export function Footer({ className, style, links }) {
   const isMobile = useMediaQuery('(max-width: 800px)')
+  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false)
 
   return (
     <footer className={s.container}>
@@ -86,7 +89,7 @@ export function Footer({ className, style, links, studioInfo }) {
         )}
 
         <ul className={cn(s.column, s.socialLinks)}>
-          <li>
+          <li className={s.socialRow}>
             <Link
               className={s.socialLink}
               href="https://twitter.com/phantasy"
@@ -123,11 +126,13 @@ export function Footer({ className, style, links, studioInfo }) {
             >
               <DiscordIcon className={s.socialIcon} />
             </Link>
-          </li>
-          <li>
-            <Link className="p-s decorate" href={`mailto:${studioInfo.email}`}>
-              E: {studioInfo.email}
-            </Link>
+
+            <button
+              className={cn('p-s decorate', s.policiesButton)}
+              onClick={() => setIsPoliciesOpen(true)}
+            >
+              Policies
+            </button>
           </li>
         </ul>
 
@@ -150,6 +155,11 @@ export function Footer({ className, style, links, studioInfo }) {
           />
         </section>
       )}
+
+      <PoliciesModal
+        isOpen={isPoliciesOpen}
+        onClose={() => setIsPoliciesOpen(false)}
+      />
     </footer>
   )
 }
