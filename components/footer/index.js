@@ -2,7 +2,20 @@ import { Image, Link } from '@studio-freight/compono'
 import { useMediaQuery } from '@studio-freight/hamo'
 import cn from 'clsx'
 import { Separator } from 'components/separator'
+import dynamic from 'next/dynamic'
 import s from './footer.module.scss'
+
+// Import the SVG icons
+const XIcon = dynamic(() => import('icons/pixel-x.svg'), { ssr: false })
+const RedditIcon = dynamic(() => import('icons/pixel-reddit.svg'), {
+  ssr: false,
+})
+const InstagramIcon = dynamic(() => import('icons/pixel-instagram.svg'), {
+  ssr: false,
+})
+const DiscordIcon = dynamic(() => import('icons/pixel-discord.svg'), {
+  ssr: false,
+})
 
 export function Footer({ className, style, links, studioInfo }) {
   const isMobile = useMediaQuery('(max-width: 800px)')
@@ -72,10 +85,43 @@ export function Footer({ className, style, links, studioInfo }) {
           </>
         )}
 
-        <ul className={s.column}>
+        <ul className={cn(s.column, s.socialLinks)}>
           <li>
-            <Link className="p-s decorate" href={`tel:${studioInfo.phone}`}>
-              P: {studioInfo.phone}
+            <Link
+              className={s.socialLink}
+              href="https://twitter.com/phantasy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X (Twitter)"
+            >
+              <XIcon className={s.socialIcon} />
+            </Link>
+            <Link
+              className={s.socialLink}
+              href="https://reddit.com/r/phantasy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Reddit"
+            >
+              <RedditIcon className={s.socialIcon} />
+            </Link>
+            <Link
+              className={s.socialLink}
+              href="https://instagram.com/phantasy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <InstagramIcon className={s.socialIcon} />
+            </Link>
+            <Link
+              className={s.socialLink}
+              href="https://discord.gg/phantasy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discord"
+            >
+              <DiscordIcon className={s.socialIcon} />
             </Link>
           </li>
           <li>

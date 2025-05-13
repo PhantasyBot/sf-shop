@@ -1,9 +1,9 @@
 import cn from 'clsx'
-import { ComposableImage } from 'components/composable-image'
 import { ScrollableBox } from 'components/scrollable-box'
 import { useCart } from 'hooks/use-cart'
 import { useStore } from 'lib/store'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { useCallback, useRef, useState } from 'react'
 import s from './product-details.module.scss'
 
@@ -17,6 +17,7 @@ export const ProductDetails = ({ className }) => {
   const setToggleCart = useStore((state) => state.setToggleCart)
   const selectedProduct = useStore((state) => state.selectedProduct)
   const setGalleryVisible = useStore((state) => state.setGalleryVisible)
+  const setSelectedImageIndex = useStore((state) => state.setSelectedImageIndex)
 
   const showVariants = useCallback((toggle) => {
     variantsRef.current?.classList.toggle(s.appear, toggle)
@@ -25,6 +26,12 @@ export const ProductDetails = ({ className }) => {
   const enableAddToCart = useCallback((toggle) => {
     addToCartRef.current?.classList.toggle(s['button-disabled'], toggle)
   }, [])
+
+  // Open gallery with specific image
+  const openGalleryWithImage = (index) => {
+    setSelectedImageIndex(index)
+    setGalleryVisible(true)
+  }
 
   // If no product is selected yet, show a loading state or return null
   if (!selectedProduct) {
@@ -76,14 +83,29 @@ export const ProductDetails = ({ className }) => {
         <div className={cn(s.images, !showInfoModal && s.visible)}>
           <button
             className={s['modal-trigger']}
-            onClick={() => setGalleryVisible(true)}
+            onClick={() => openGalleryWithImage(0)}
           >
             <Plus />
           </button>
           <ScrollableBox reset={showInfoModal}>
-            <button key={'i'} onClick={() => setGalleryVisible(true)}>
-              <ComposableImage sources={selectedProduct.images} />
-            </button>
+            <div className={s.imageGrid}>
+              {selectedProduct.images &&
+                selectedProduct.images.map((image, index) => (
+                  <button
+                    key={`product-image-${index}`}
+                    onClick={() => openGalleryWithImage(index)}
+                    className={s.imageButton}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt || selectedProduct.name}
+                      width={500}
+                      height={500}
+                      className={s.productImage}
+                    />
+                  </button>
+                ))}
+            </div>
           </ScrollableBox>
         </div>
         <ScrollableBox

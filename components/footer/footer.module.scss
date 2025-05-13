@@ -82,4 +82,39 @@
       }
     }
   }
+
+  .socialLinks {
+    li:first-child {
+      display: flex;
+      gap: desktop-vw(16px);
+      margin-bottom: desktop-vw(16px);
+
+      @include mobile {
+        gap: mobile-vw(16px);
+        margin-bottom: mobile-vw(16px);
+      }
+    }
+
+    .socialLink {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--white);
+      }
+    }
+
+    .socialIcon {
+      width: desktop-vw(24px);
+      height: desktop-vw(24px);
+
+      @include mobile {
+        width: mobile-vw(24px);
+        height: mobile-vw(24px);
+      }
+    }
+  }
 }

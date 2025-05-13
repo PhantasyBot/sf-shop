@@ -4,23 +4,28 @@ import cn from 'clsx'
 import { ScrollableBox } from 'components/scrollable-box'
 import { useStore } from 'lib/store'
 import logger from 'lib/utils/logger'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import shallow from 'zustand/shallow'
 import s from './gallery.module.scss'
 
 export function Gallery() {
   const contentRef = useRef(null)
-  const [selectedProduct, galleryVisible, setGalleryVisible] = useStore(
+  const [
+    selectedProduct,
+    galleryVisible,
+    setGalleryVisible,
+    selectedImageIndex,
+    setSelectedImageIndex,
+  ] = useStore(
     (state) => [
       state.selectedProduct,
       state.galleryVisible,
       state.setGalleryVisible,
+      state.selectedImageIndex,
+      state.setSelectedImageIndex,
     ],
     shallow
   )
-
-  // Add state to track the current image index
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useOutsideClickEvent(contentRef, () => setGalleryVisible(false))
 
@@ -40,14 +45,7 @@ export function Gallery() {
 
     document.addEventListener('keydown', keyHandler, false)
     return () => document.removeEventListener('keydown', keyHandler, false)
-  }, [galleryVisible, selectedProduct])
-
-  // Reset image index when gallery opens
-  useEffect(() => {
-    if (galleryVisible) {
-      setCurrentImageIndex(0)
-    }
-  }, [galleryVisible])
+  }, [galleryVisible, selectedProduct, selectedImageIndex])
 
   // Log the current state for debugging
   useEffect(() => {
@@ -57,9 +55,10 @@ export function Gallery() {
         hasSelectedProduct: !!selectedProduct,
         productName: selectedProduct?.name || 'None',
         imageCount: selectedProduct?.images?.length || 0,
+        currentImageIndex: selectedImageIndex,
       })
     }
-  }, [galleryVisible, selectedProduct])
+  }, [galleryVisible, selectedProduct, selectedImageIndex])
 
   // If Gallery is visible but no product is selected, close the gallery
   useEffect(() => {
@@ -72,16 +71,20 @@ export function Gallery() {
   // Handle navigation
   const goToPrevImage = () => {
     if (selectedProduct?.images?.length > 1) {
-      setCurrentImageIndex((prev) =>
-        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
+      setSelectedImageIndex(
+        selectedImageIndex === 0
+          ? selectedProduct.images.length - 1
+          : selectedImageIndex - 1
       )
     }
   }
 
   const goToNextImage = () => {
     if (selectedProduct?.images?.length > 1) {
-      setCurrentImageIndex((prev) =>
-        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      setSelectedImageIndex(
+        selectedImageIndex === selectedProduct.images.length - 1
+          ? 0
+          : selectedImageIndex + 1
       )
     }
   }
@@ -109,7 +112,7 @@ export function Gallery() {
               <span className="p-xs text-uppercase">Prev</span>
             </button>
             <span className={s.counter}>
-              {currentImageIndex + 1} / {selectedProduct.images.length}
+              {selectedImageIndex + 1} / {selectedProduct.images.length}
             </span>
             <button className={s.navButton} onClick={goToNextImage}>
               <span className="p-xs text-uppercase">Next</span>
@@ -121,9 +124,9 @@ export function Gallery() {
         {selectedProduct && selectedProduct.images && (
           <div key={'i'} ref={contentRef} className={s.imageContainer}>
             <Image
-              src={selectedProduct.images[currentImageIndex]?.src}
+              src={selectedProduct.images[selectedImageIndex]?.src}
               alt={
-                selectedProduct.images[currentImageIndex]?.alt ||
+                selectedProduct.images[selectedImageIndex]?.alt ||
                 selectedProduct.name
               }
               width={1038}
