@@ -34,17 +34,24 @@
   font-family: var(--font-secondary);
   text-transform: uppercase;
   width: 100%;
+  display: flex;
+  align-items: center;
 
   @include mobile {
     row-gap: mobile-vw(48px);
+    flex-direction: column;
   }
 
   @include desktop {
     padding: desktop-vw(16px) 0 desktop-vw(24px) 0;
+    justify-content: space-between;
+    gap: desktop-vw(16px);
   }
 
   .column {
     grid-column: span 2;
+    display: flex;
+    align-items: center;
 
     @include desktop {
       &:nth-child(1) {
@@ -61,6 +68,7 @@
       }
       &:nth-child(5) {
         grid-column: span 2;
+        margin-left: auto;
       }
       &:nth-child(6) {
         text-align: end;
@@ -78,7 +86,8 @@
       margin-top: mobile-vw(16px);
 
       @include desktop {
-        margin-top: desktop-vw(4px);
+        margin-top: 0;
+        margin-left: desktop-vw(16px);
       }
     }
 
@@ -130,13 +139,19 @@
         height: mobile-vw(24px);
       }
     }
+  }
 
-    .policiesButton {
-      margin-left: desktop-vw(8px);
+  .policiesButton {
+    background: none;
+    border: none;
+    color: var(--green);
+    font-family: var(--font-secondary);
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
 
-      @include mobile {
-        margin-left: mobile-vw(8px);
-      }
+    &:hover {
+      text-decoration: underline;
     }
   }
 }

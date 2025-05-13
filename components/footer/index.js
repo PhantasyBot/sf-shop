@@ -26,124 +26,141 @@ export function Footer({ className, style, links }) {
   return (
     <footer className={s.container}>
       <Separator className="layout-block" />
-      <div className={cn(s.footer, 'layout-grid', className)} style={style}>
-        <p className={cn(s.column, 'p-s text-muted')}>WHAT'S YOUR FANTASY?</p>
-        {isMobile === false && (
-          <>
-            <ul className={s.column}>
-              {links.slice(0, 2).map((link, i) => (
-                <li key={i}>
-                  <Link className="p-s decorate" href={link.url}>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <ul className={s.column}>
-              {links.slice(2, 4).map((link, i) => (
-                <li key={i}>
-                  <Link className="p-s decorate" href={link.url}>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <ul className={s.column}>
-              {links.slice(4, 6).map((link, i) => (
-                <li key={i}>
-                  <Link className="p-s decorate" href={link.url}>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
 
-        {isMobile === true && (
-          <>
-            <ul className={s.column}>
-              <li className="p-s text-muted">
-                &copy; {new Date().getFullYear()}
-              </li>
-            </ul>
-            <ul className={s.column}>
-              {links.slice(0, 3).map((link, i) => (
-                <li key={i}>
-                  <Link className="p-s decorate" href={link.url}>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <ul className={s.column}>
-              {links.slice(3, 6).map((link, i) => (
-                <li key={i}>
-                  <Link className="p-s decorate" href={link.url}>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+      {isMobile === false ? (
+        <div className={cn(s.footer, 'layout-block', className)} style={style}>
+          <p className={cn(s.column, 'p-s text-muted')}>WHAT'S YOUR FANTASY?</p>
 
-        <ul className={cn(s.column, s.socialLinks)}>
-          <li className={s.socialRow}>
-            <Link
-              className={s.socialLink}
-              href="https://twitter.com/phantasy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X (Twitter)"
-            >
-              <XIcon className={s.socialIcon} />
-            </Link>
-            <Link
-              className={s.socialLink}
-              href="https://reddit.com/r/phantasy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Reddit"
-            >
-              <RedditIcon className={s.socialIcon} />
-            </Link>
-            <Link
-              className={s.socialLink}
-              href="https://instagram.com/phantasy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              <InstagramIcon className={s.socialIcon} />
-            </Link>
-            <Link
-              className={s.socialLink}
-              href="https://discord.gg/phantasy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Discord"
-            >
-              <DiscordIcon className={s.socialIcon} />
-            </Link>
-
-            <button
-              className={cn('p-s decorate', s.policiesButton)}
-              onClick={() => setIsPoliciesOpen(true)}
-            >
-              Policies
-            </button>
-          </li>
-        </ul>
-
-        {isMobile === false && (
-          <ul className={s.column}>
-            <li className="p-s text-muted">
-              &copy; {new Date().getFullYear()}
+          <ul className={cn(s.column, s.socialLinks)}>
+            <li className={s.socialRow}>
+              <Link
+                className={s.socialLink}
+                href="https://twitter.com/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter)"
+              >
+                <XIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://reddit.com/r/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Reddit"
+              >
+                <RedditIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://instagram.com/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <InstagramIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://discord.gg/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Discord"
+              >
+                <DiscordIcon className={s.socialIcon} />
+              </Link>
             </li>
           </ul>
-        )}
-      </div>
+
+          <button
+            className={cn('p-s decorate', s.policiesButton)}
+            onClick={() => setIsPoliciesOpen(true)}
+          >
+            Policies
+          </button>
+
+          <p className="p-s text-muted">
+            &copy; {new Date().getFullYear()} PHANTASY LLC
+          </p>
+        </div>
+      ) : (
+        // Mobile layout
+        <div className={cn(s.footer, 'layout-grid', className)} style={style}>
+          <p className={cn(s.column, 'p-s text-muted')}>WHAT'S YOUR FANTASY?</p>
+
+          <ul className={s.column}>
+            <li className="p-s text-muted">
+              &copy; {new Date().getFullYear()} PHANTASY LLC
+            </li>
+          </ul>
+          <ul className={s.column}>
+            {links.slice(0, 3).map((link, i) => (
+              <li key={i}>
+                <Link className="p-s decorate" href={link.url}>
+                  {link.text}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className={s.column}>
+            {links.slice(3, 6).map((link, i) => (
+              <li key={i}>
+                <Link className="p-s decorate" href={link.url}>
+                  {link.text}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <ul className={cn(s.column, s.socialLinks)}>
+            <li className={s.socialRow}>
+              <Link
+                className={s.socialLink}
+                href="https://twitter.com/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter)"
+              >
+                <XIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://reddit.com/r/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Reddit"
+              >
+                <RedditIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://instagram.com/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <InstagramIcon className={s.socialIcon} />
+              </Link>
+              <Link
+                className={s.socialLink}
+                href="https://discord.gg/phantasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Discord"
+              >
+                <DiscordIcon className={s.socialIcon} />
+              </Link>
+
+              <button
+                className={cn('p-s decorate', s.policiesButton)}
+                onClick={() => setIsPoliciesOpen(true)}
+              >
+                Policies
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
 
       {isMobile === true && (
         <section className={s['footer-image']}>
