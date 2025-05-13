@@ -33,6 +33,15 @@
 }
 
 @font-face {
+  font-family: 'HuskyStash';
+  src: url('/fonts/HuskyStash.woff2') format('woff2');
+  unicode-range: U+000-5FF; /* Latin glyphs */
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Messina Sans Mono';
   src: url('/fonts/MessinaSansMono-SemiBold.woff2') format('woff2');
   font-weight: 600;
@@ -54,4 +63,5 @@
   --font: 'Neue Montreal';
   --font-secondary: 'Messina Sans Mono';
   --font-tertiary: 'GT Alpina';
+  --font-husky: 'HuskyStash';
 }

@@ -116,3 +116,10 @@ svg.icon {
     }
   }
 }
+
+// Add the husky-font class
+.husky-font {
+  font-family: var(--font-husky) !important;
+  font-weight: normal;
+  letter-spacing: 0.02em;
+}

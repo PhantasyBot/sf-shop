@@ -1,14 +1,18 @@
 import { useMediaQuery } from '@studio-freight/hamo'
 import cn from 'clsx'
 import { About } from 'components/home/about'
+import { CollectionSelector } from 'components/home/collection-selector'
 import { Products } from 'components/home/products'
 import { ProductDetails } from 'components/home/products-details'
 import { ClientOnly } from 'components/isomorphic'
 import { LayoutMobile } from 'components/layout-mobile'
 import { Layout } from 'layouts/default'
 import Shopify from 'lib/shopify'
+import { useStore } from 'lib/store'
 import logger from 'lib/utils/logger'
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+import shallow from 'zustand/shallow'
 import s from './home.module.scss'
 
 const Gallery = dynamic(
@@ -18,9 +22,84 @@ const Gallery = dynamic(
   }
 )
 
-export default function Home({ studioFreight, footerLinks, productsArray }) {
+export default function Home({
+  studioFreight,
+  footerLinks,
+  productsArray,
+  collections = [],
+}) {
   const isDesktop = useMediaQuery('(min-width: 800px)')
   const isMobile = useMediaQuery('(max-width: 800px)')
+
+  const [setCollections, selectedCollection, setSelectedCollection] = useStore(
+    (state) => [
+      state.setCollections,
+      state.selectedCollection,
+      state.setSelectedCollection,
+    ],
+    shallow
+  )
+
+  const [displayedProducts, setDisplayedProducts] = useState(productsArray)
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
+
+  // Set collections in the store
+  useEffect(() => {
+    setCollections(collections)
+    // If no collection is selected, select the first one
+    if (collections?.length > 0 && !selectedCollection) {
+      setSelectedCollection(collections[0])
+    }
+  }, [collections, setCollections, selectedCollection, setSelectedCollection])
+
+  // Fetch products for the selected collection
+  useEffect(() => {
+    async function fetchCollectionProducts() {
+      if (selectedCollection) {
+        setIsLoadingProducts(true)
+        try {
+          console.log(
+            `Fetching products for collection: ${selectedCollection.handle}`
+          )
+          const store = new Shopify()
+          const result = await store.getCollectionProducts(
+            selectedCollection.handle
+          )
+
+          console.log('Collection products fetch result:', {
+            collectionFound: !!result.collection,
+            productsCount: result.products?.length || 0,
+            products: result.products?.slice(0, 2) || [],
+          })
+
+          if (result.products && result.products.length > 0) {
+            setDisplayedProducts(result.products)
+            logger.info(
+              `Loaded ${result.products.length} products from collection "${selectedCollection.title}"`
+            )
+          } else {
+            console.warn(
+              `No products found in collection "${selectedCollection.title}", using default products`
+            )
+            setDisplayedProducts(productsArray)
+            logger.warn(
+              `No products found in collection "${selectedCollection.title}", using default products`
+            )
+          }
+        } catch (error) {
+          console.error(`Error fetching collection products:`, error)
+          logger.error(`Error fetching collection products: ${error.message}`)
+          setDisplayedProducts(productsArray)
+        } finally {
+          setIsLoadingProducts(false)
+        }
+      } else {
+        setDisplayedProducts(productsArray)
+      }
+    }
+
+    fetchCollectionProducts()
+  }, [selectedCollection, productsArray])
 
   return (
     <Layout
@@ -35,16 +114,33 @@ export default function Home({ studioFreight, footerLinks, productsArray }) {
       {isDesktop === true ? (
         <ClientOnly>
           <div className={cn(s.content, 'layout-grid')}>
-            <About data={studioFreight.about} />
-            <Products products={productsArray} />
-            <ProductDetails />
+            <About data={studioFreight.about} className={s.aboutSection} />
+            {collections.length > 0 && (
+              <CollectionSelector className={s.collectionsSection} />
+            )}
+            <Products
+              products={displayedProducts}
+              isLoading={isLoadingProducts}
+              className={s.productsSection}
+            />
+            <ProductDetails className={s.detailsSection} />
           </div>
         </ClientOnly>
       ) : (
-        <LayoutMobile studioFreight={studioFreight} products={productsArray} />
+        <LayoutMobile
+          studioFreight={studioFreight}
+          products={displayedProducts}
+          collections={collections}
+          isLoadingProducts={isLoadingProducts}
+        />
       )}
       {isMobile === true && (
-        <LayoutMobile studioFreight={studioFreight} products={productsArray} />
+        <LayoutMobile
+          studioFreight={studioFreight}
+          products={displayedProducts}
+          collections={collections}
+          isLoadingProducts={isLoadingProducts}
+        />
       )}
       <Gallery />
     </Layout>
@@ -91,6 +187,8 @@ export async function getStaticProps() {
 
   // Try to get products from Shopify if configured
   let productsArray = []
+  let collections = []
+
   try {
     logger.info('Initializing Shopify client')
     const store = new Shopify()
@@ -125,6 +223,19 @@ export async function getStaticProps() {
     if (!isConnected) {
       logger.warn('Could not connect to Shopify API, using mock product data')
       throw new Error('Failed to connect to Shopify API')
+    }
+
+    // Fetch collections
+    logger.info('Fetching collections from Shopify')
+    const collectionsResult = await store.getCollections()
+
+    if (collectionsResult && collectionsResult.length > 0) {
+      logger.info(
+        `Successfully fetched ${collectionsResult.length} collections from Shopify`
+      )
+      collections = collectionsResult
+    } else {
+      logger.warn('No collections returned from Shopify')
     }
 
     logger.info('Fetching products from Shopify')
@@ -244,6 +355,7 @@ export async function getStaticProps() {
       studioFreight,
       footerLinks,
       productsArray,
+      collections,
       id: 'home',
     },
     revalidate: 30,

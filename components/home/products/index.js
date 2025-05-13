@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import shallow from 'zustand/shallow'
 import s from './products.module.scss'
 
-export const Products = ({ products }) => {
+export const Products = ({ products, isLoading = false, className }) => {
   const [selectedProduct, setSelectedProduct] = useStore(
     (state) => [state.selectedProduct, state.setSelectedProduct],
     shallow
@@ -36,9 +36,22 @@ export const Products = ({ products }) => {
   }, [products, selectedProduct, setSelectedProduct])
 
   // If no products, show empty state
+  if (isLoading) {
+    return (
+      <section className={cn(s.products, className)}>
+        <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
+          Products
+        </p>
+        <div className={s.empty}>
+          <p className="p">Loading products...</p>
+        </div>
+      </section>
+    )
+  }
+
   if (!products || products.length === 0) {
     return (
-      <section className={s.products}>
+      <section className={cn(s.products, className)}>
         <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
           Products
         </p>
@@ -50,7 +63,7 @@ export const Products = ({ products }) => {
   }
 
   return (
-    <section className={s.products}>
+    <section className={cn(s.products, className)}>
       <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
         Products
       </p>

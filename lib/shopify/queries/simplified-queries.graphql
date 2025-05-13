@@ -42,3 +42,100 @@ query simpleProducts($query: String = "") {
     }
   }
 }
+
+query allCollections {
+  collections(first: 10) {
+    edges {
+      node {
+        id
+        title
+        handle
+        description
+        image {
+          originalSrc
+          altText
+        }
+      }
+    }
+  }
+}
+
+query collectionProducts($handle: String!) {
+  collectionByHandle(handle: $handle) {
+    id
+    title
+    description
+    handle
+    products(first: 20) {
+      edges {
+        node {
+          id
+          title
+          description
+          handle
+          availableForSale
+          priceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          images(first: 5) {
+            edges {
+              node {
+                originalSrc
+                altText
+              }
+            }
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                availableForSale
+                priceV2 {
+                  amount
+                  currencyCode
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query minimalCollectionProducts($handle: String!) {
+  collectionByHandle(handle: $handle) {
+    id
+    title
+    handle
+    products(first: 20) {
+      edges {
+        node {
+          id
+          title
+          description
+          handle
+          availableForSale
+          priceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          featuredImage {
+            originalSrc
+            altText
+          }
+        }
+      }
+    }
+  }
+}

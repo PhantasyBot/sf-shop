@@ -16,7 +16,7 @@ const StarDuotone = dynamic(() => import('icons/star-duotone.svg'), {
   ssr: false,
 })
 
-export const Header = ({ title, principles = [] }) => {
+export const Header = ({ title, principles = [], titleClassName }) => {
   const setToggleCart = useStore((state) => state.setToggleCart)
   const isMobile = useMediaQuery('(max-width: 800px)')
   // const visible = usePageAppear()
@@ -76,7 +76,7 @@ export const Header = ({ title, principles = [] }) => {
       </div>
       <Separator />
       <div className={cn(s.header, 'layout-grid')}>
-        <h1 className={cn('h1', s.title)}>{title}</h1>
+        <h1 className={cn('h1', s.title, titleClassName)}>{title}</h1>
       </div>
       <Separator />
 

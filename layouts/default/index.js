@@ -58,9 +58,10 @@ export function Layout({
       <CustomHead {...seo} />
       <div className={cn(`theme-${theme}`, s.layout, className)}>
         <Header
-          title="PHANTASY MERCH"
+          title="MERCHANDISE"
           principles={principles}
           contact={contactData}
+          titleClassName="husky-font"
         />
         <main className={s.main}>{children}</main>
         <Footer links={footerLinks} studioInfo={studioInfo} />

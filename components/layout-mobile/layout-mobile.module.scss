@@ -1,22 +1,48 @@
 .content {
-  align-items: start;
+  width: 100%;
   height: 100%;
-  padding: desktop-vw(18px) 0 desktop-vw(24px) 0;
-
-  @include desktop {
-    display: none;
-  }
+  margin-top: 80px;
 
   .hero-image {
-    margin-bottom: mobile-vw(24px);
-    position: relative;
-    aspect-ratio: 375 / 350;
     width: 100%;
-    height: mobile-vw(350px);
+    height: 100vh;
+    position: relative;
+  }
 
-    @include desktop {
-      display: none;
+  .projects {
+    margin-top: 10px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  .collections {
+    padding-top: 30px;
+    padding-bottom: 0;
+  }
+
+  .loading {
+    padding: 30px 0;
+    text-align: center;
+  }
+
+  .image {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+
+  .about {
+    margin-top: 10px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    .title {
+      margin-bottom: 20px;
     }
+  }
+
+  @media only screen and (min-width: 800px) {
+    display: none;
   }
 }
 

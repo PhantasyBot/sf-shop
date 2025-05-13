@@ -2,13 +2,43 @@
   align-items: start;
   height: 100%;
   padding: desktop-vw(18px) 0 desktop-vw(24px) 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'about collections collections'
+    'about products products'
+    'about details details';
+
+  .aboutSection {
+    grid-area: about;
+    height: 100%;
+    border-right: 1px solid var(--grey);
+    padding-right: desktop-vw(24px);
+  }
+
+  .collectionsSection {
+    grid-area: collections;
+    border-bottom: 1px solid var(--grey);
+    padding-bottom: desktop-vw(24px);
+    overflow: visible;
+    height: auto;
+  }
+
+  .productsSection {
+    grid-area: products;
+    height: 100%;
+  }
+
+  .detailsSection {
+    grid-area: details;
+    height: 100%;
+  }
 
   > section {
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    height: 100%;
 
     &:before {
       content: '';
@@ -18,12 +48,6 @@
       height: desktop-vh(40px);
       z-index: 1;
       pointer-events: none;
-    }
-
-    &:nth-child(1),
-    &:nth-child(2) {
-      border-right: 1px solid var(--grey);
-      padding-right: desktop-vw(24px);
     }
   }
 }

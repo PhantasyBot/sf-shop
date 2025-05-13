@@ -1,0 +1,32 @@
+.collectionSelector {
+  padding: desktop-vw(32px) 0;
+
+  .title {
+    margin-bottom: desktop-vw(16px);
+  }
+
+  .collections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: desktop-vw(12px);
+  }
+
+  .collection {
+    padding: desktop-vw(8px) desktop-vw(12px);
+    border: 1px solid var(--green);
+    border-radius: desktop-vw(4px);
+    background: transparent;
+    color: var(--green);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(var(--green-rgb), 0.1);
+    }
+
+    &.active {
+      background: var(--green);
+      color: var(--black);
+    }
+  }
+}

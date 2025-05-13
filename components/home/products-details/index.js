@@ -9,7 +9,7 @@ import s from './product-details.module.scss'
 
 const Plus = dynamic(() => import('assets/svg/add.svg'), { ssr: false })
 
-export const ProductDetails = () => {
+export const ProductDetails = ({ className }) => {
   const cart = useCart()
   const variantsRef = useRef()
   const addToCartRef = useRef()
@@ -29,7 +29,7 @@ export const ProductDetails = () => {
   // If no product is selected yet, show a loading state or return null
   if (!selectedProduct) {
     return (
-      <section className={s['product-details']}>
+      <section className={cn(s['product-details'], className)}>
         <div className={s.heading}>
           <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
             Product detail
@@ -43,7 +43,7 @@ export const ProductDetails = () => {
   }
 
   return (
-    <section className={s['product-details']}>
+    <section className={cn(s['product-details'], className)}>
       <div className={s.heading}>
         <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
           Product detail

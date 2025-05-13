@@ -1,10 +1,10 @@
+import { Image } from '@studio-freight/compono'
 import { useOutsideClickEvent } from '@studio-freight/hamo'
 import cn from 'clsx'
-import { ComposableImage } from 'components/composable-image'
 import { ScrollableBox } from 'components/scrollable-box'
 import { useStore } from 'lib/store'
 import logger from 'lib/utils/logger'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import shallow from 'zustand/shallow'
 import s from './gallery.module.scss'
 
@@ -19,6 +19,9 @@ export function Gallery() {
     shallow
   )
 
+  // Add state to track the current image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
   useOutsideClickEvent(contentRef, () => setGalleryVisible(false))
 
   useEffect(() => {
@@ -32,6 +35,13 @@ export function Gallery() {
     return () => document.removeEventListener('keydown', escFunction, false)
   }, [])
 
+  // Reset image index when gallery opens
+  useEffect(() => {
+    if (galleryVisible) {
+      setCurrentImageIndex(0)
+    }
+  }, [galleryVisible])
+
   // Log the current state for debugging
   useEffect(() => {
     if (galleryVisible) {
@@ -39,6 +49,7 @@ export function Gallery() {
         galleryVisible,
         hasSelectedProduct: !!selectedProduct,
         productName: selectedProduct?.name || 'None',
+        imageCount: selectedProduct?.images?.length || 0,
       })
     }
   }, [galleryVisible, selectedProduct])
@@ -50,6 +61,23 @@ export function Gallery() {
       setGalleryVisible(false)
     }
   }, [galleryVisible, selectedProduct, setGalleryVisible])
+
+  // Handle navigation
+  const goToPrevImage = () => {
+    if (selectedProduct?.images?.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
+      )
+    }
+  }
+
+  const goToNextImage = () => {
+    if (selectedProduct?.images?.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      )
+    }
+  }
 
   // Don't render content if no product is selected
   if (!selectedProduct && galleryVisible) {
@@ -67,14 +95,35 @@ export function Gallery() {
         </svg>
         <span className={cn(s.text, 'p-xs text-uppercase')}>Close</span>
       </button>
+      <div className={s.navigation}>
+        {selectedProduct?.images?.length > 1 && (
+          <>
+            <button className={s.navButton} onClick={goToPrevImage}>
+              <span className="p-xs text-uppercase">Prev</span>
+            </button>
+            <span className={s.counter}>
+              {currentImageIndex + 1} / {selectedProduct.images.length}
+            </span>
+            <button className={s.navButton} onClick={goToNextImage}>
+              <span className="p-xs text-uppercase">Next</span>
+            </button>
+          </>
+        )}
+      </div>
       <ScrollableBox className={s.scroller} reset={!galleryVisible}>
         {selectedProduct && selectedProduct.images && (
-          <div key={'i'} ref={contentRef}>
-            <ComposableImage
-              sources={selectedProduct.images}
+          <div key={'i'} ref={contentRef} className={s.imageContainer}>
+            <Image
+              src={selectedProduct.images[currentImageIndex].src}
+              alt={
+                selectedProduct.images[currentImageIndex].alt ||
+                selectedProduct.name
+              }
               width={1038}
               height={611}
-              large
+              layout="responsive"
+              objectFit="contain"
+              className={s.fullImage}
             />
           </div>
         )}
