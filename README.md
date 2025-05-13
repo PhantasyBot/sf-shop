@@ -102,12 +102,48 @@ This is a Shopify storefront built using Next.js.
 
    # Site URL
    NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+   # Logging (debug, info, warn, error, none)
+   NEXT_PUBLIC_LOG_LEVEL=debug
    ```
 
 4. Run the development server:
    ```
    pnpm dev
    ```
+
+## Logging System
+
+The application includes a robust logging system to help debug Shopify integration:
+
+- Set `NEXT_PUBLIC_LOG_LEVEL` in your `.env.local` file to one of:
+  - `debug`: Show all logs (most verbose)
+  - `info`: Show info, warnings and errors
+  - `warn`: Show only warnings and errors
+  - `error`: Show only errors
+  - `none`: Disable all logging
+
+This logging system is particularly helpful for debugging Shopify product loading. When running the app with `debug` logging enabled, you'll see detailed information about:
+
+- Shopify client initialization
+- API requests and responses
+- Product data fetching and formatting
+- Error details with stack traces
+
+## Troubleshooting Shopify Integration
+
+If your products aren't appearing:
+
+1. Check that your Shopify credentials are correct:
+
+   - `NEXT_PUBLIC_SHOPIFY_DOMAIN` should be your full Shopify domain (e.g., `your-store.myshopify.com`)
+   - `NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN` should be your Storefront API access token
+
+2. Look at the browser console with logging enabled to see detailed errors
+
+3. Verify that your Shopify store has products and they're published to the Storefront API
+
+4. Confirm that the store domain is accessible and the API is responding (you should see this in the logs)
 
 ## Features
 

@@ -6,6 +6,17 @@
     padding-bottom: desktop-vh(24px);
   }
 
+  .empty {
+    padding: desktop-vw(20px) 0;
+    border-top: 1px solid var(--grey);
+    border-bottom: 1px solid var(--grey);
+
+    p {
+      opacity: 0.7;
+      font-style: italic;
+    }
+  }
+
   .list {
     .list-item {
       padding: desktop-vw(16px) 0;

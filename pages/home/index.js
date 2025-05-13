@@ -7,6 +7,7 @@ import { ClientOnly } from 'components/isomorphic'
 import { LayoutMobile } from 'components/layout-mobile'
 import { Layout } from 'layouts/default'
 import Shopify from 'lib/shopify'
+import logger from 'lib/utils/logger'
 import dynamic from 'next/dynamic'
 import s from './home.module.scss'
 
@@ -51,6 +52,8 @@ export default function Home({ studioFreight, footerLinks, productsArray }) {
 }
 
 export async function getStaticProps() {
+  logger.info('Starting getStaticProps for home page')
+
   // Mock data to replace Contentful data
   const studioFreight = {
     principles: ['Quality', 'Design', 'Innovation'],
@@ -75,31 +78,73 @@ export async function getStaticProps() {
         ],
       },
     },
-    phoneNumber: '+1 (123) 456-7890',
-    email: 'hello@phantasy.studio',
+    phoneNumber: '+1 (424) 222-9967',
+    email: 'hello@phantasy.bot',
   }
 
   // Mock footer links
   const footerLinks = [
-    { label: 'Instagram', href: 'https://instagram.com/phantasy' },
-    { label: 'Twitter', href: 'https://twitter.com/phantasy' },
+    { label: 'Instagram', href: 'https://instagram.com/phantasydotbot' },
+    { label: 'Twitter', href: 'https://twitter.com/phantasydotbot' },
     { label: 'Contact', href: '/contact' },
   ]
 
   // Try to get products from Shopify if configured
   let productsArray = []
   try {
+    logger.info('Initializing Shopify client')
     const store = new Shopify()
+
+    // Log environment variables (masked)
+    logger.info('Environment variables:')
+    logger.info(
+      `NEXT_PUBLIC_SHOPIFY_DOMAIN: ${
+        process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || 'NOT SET'
+      }`
+    )
+    logger.info(
+      `NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${
+        process.env.NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+          ? '****' + process.env.NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN.slice(-4)
+          : 'NOT SET'
+      }`
+    )
+
+    logger.info('Fetching products from Shopify')
+    const endTimer = logger.time('Fetching Shopify products')
     const products = await store.getAllProducts()
-    if (products) {
+    endTimer()
+
+    if (products && products.length > 0) {
+      logger.info(
+        `Successfully fetched ${products.length} products from Shopify`
+      )
+      logger.debug(
+        'Product names:',
+        products.map((p) => p.name)
+      )
       productsArray = products
+    } else {
+      logger.warn('No products returned from Shopify')
     }
   } catch (error) {
-    console.log(
-      'Shopify not configured yet or error fetching products:',
-      error.message
-    )
+    logger.error(`Failed to fetch Shopify products: ${error.message}`)
+    logger.error('Stack trace:', error.stack)
+
+    // Additional environment validation
+    if (!process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN) {
+      logger.error(
+        'NEXT_PUBLIC_SHOPIFY_DOMAIN is not set in environment variables'
+      )
+    }
+    if (!process.env.NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN) {
+      logger.error(
+        'NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN is not set in environment variables'
+      )
+    }
+
     // Mock product data when Shopify is not configured
+    logger.info('Using mock product data instead')
     productsArray = [
       {
         id: 'mock-product-1',
@@ -153,6 +198,8 @@ export async function getStaticProps() {
       },
     ]
   }
+
+  logger.info('Completed getStaticProps for home page')
 
   return {
     props: {

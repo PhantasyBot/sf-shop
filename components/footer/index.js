@@ -11,7 +11,7 @@ export function Footer({ className, style, links, studioInfo }) {
     <footer className={s.container}>
       <Separator className="layout-block" />
       <div className={cn(s.footer, 'layout-grid', className)} style={style}>
-        <p className={cn(s.column, 'p-s text-muted')}>Built on Principle</p>
+        <p className={cn(s.column, 'p-s text-muted')}>WHAT'S YOUR FANTASY?</p>
         {isMobile === false && (
           <>
             <ul className={s.column}>

@@ -13,9 +13,9 @@ const Orchestra = dynamic(
 
 export function Layout({
   seo = {
-    title: 'PHANTASY - Built on Principle',
+    title: 'PHANTASY - 18+ NSFW AI Gaming & Entertainiment Studio',
     description:
-      'Phantasy is an independent creative studio built on principle.',
+      'Phantasy is an 18+ AI-powered chatbot that can help you with your fantasies`.',
     image: { url: 'https://studiofreight.com/sf-og.jpg' },
     keywords: [
       'freight',
@@ -58,7 +58,7 @@ export function Layout({
       <CustomHead {...seo} />
       <div className={cn(`theme-${theme}`, s.layout, className)}>
         <Header
-          title="SHOP FREIGHT"
+          title="PHANTASY MERCH"
           principles={principles}
           contact={contactData}
         />
