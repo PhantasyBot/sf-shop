@@ -99,7 +99,7 @@ const ChangeQuantity = ({ product }) => {
       <aside>
         <button
           onClick={() =>
-            cart.utils.updateItemQuantityUI(data, {
+            cart.utils.updateItemQuantityUI({
               quantity: Math.max(product.quantity - 1, 1),
               id: product.id,
               merchandiseId: product.options.id,
@@ -117,10 +117,10 @@ const ChangeQuantity = ({ product }) => {
               product.quantity === product.options.availableQuantity,
           })}
           onClick={() =>
-            cart.utils.updateItemQuantityUI(data, {
+            cart.utils.updateItemQuantityUI({
               quantity: Math.min(
                 product.quantity + 1,
-                product.options.availableQuantity
+                product.options.availableQuantity || 999
               ),
               id: product.id,
               merchandiseId: product.options.id,

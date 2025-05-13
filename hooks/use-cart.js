@@ -203,19 +203,37 @@ export const useCart = () => {
     },
 
     updateItemQuantityUI: async function updateItemQuantityUI(
-      data,
-      props,
-      triggerMutate = true
+      dataOrProps,
+      propsOrTriggerMutate,
+      triggerMutateOrUndefined = true
     ) {
+      // Handle different argument patterns
+      let data, props, triggerMutate
+
+      if (dataOrProps && dataOrProps.id) {
+        // New style: First argument is props object
+        props = dataOrProps
+        triggerMutate = propsOrTriggerMutate !== false
+        // Fetch current cart data
+        data = await cartFetcher()
+      } else {
+        // Old style: First argument is data, second is props
+        data = dataOrProps
+        props = propsOrTriggerMutate
+        triggerMutate = triggerMutateOrUndefined !== false
+      }
+
       if (triggerMutate) {
         const newData = { ...data }
         const getItem = newData.products.findIndex(
           (item) => item.id === props.id
         )
-        newData.products[getItem].quantity = props.quantity
-        newData.totalPrice = this.updateCartPriceUI(newData)
 
-        await mutate('/api/cart/fetch', newData, false)
+        if (getItem !== -1) {
+          newData.products[getItem].quantity = props.quantity
+          newData.totalPrice = this.updateCartPriceUI(newData)
+          await mutate('/api/cart/fetch', newData, false)
+        }
       }
 
       updateItem(props)
