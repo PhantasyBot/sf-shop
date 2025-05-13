@@ -9,7 +9,15 @@ export const About = ({ data }) => {
       <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
         About
       </p>
-      <ScrollableBox className={s.description}>{renderer(data)}</ScrollableBox>
+      <ScrollableBox className={s.description}>
+        {data && data.json ? (
+          renderer(data)
+        ) : (
+          <p className="p">
+            PHANTASY is an independent creative studio built on principle.
+          </p>
+        )}
+      </ScrollableBox>
     </section>
   )
 }

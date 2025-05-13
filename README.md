@@ -81,3 +81,48 @@ This toolkit is curated and maintained by the Studio Freight Things team:
 ## License
 
 [The MIT License.](https://opensource.org/licenses/MIT)
+
+# PHANTASY Shopify Store
+
+This is a Shopify storefront built using Next.js.
+
+## Setup
+
+1. Clone this repository
+2. Install dependencies using pnpm:
+   ```
+   pnpm install
+   ```
+3. Create a `.env.local` file in the root directory with the following variables:
+
+   ```
+   # Shopify
+   NEXT_PUBLIC_SHOPIFY_DOMAIN=your-store.myshopify.com
+   NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN=your-storefront-access-token
+
+   # Site URL
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   ```
+
+4. Run the development server:
+   ```
+   pnpm dev
+   ```
+
+## Features
+
+- Shopify integration for product listings
+- Responsive design
+- Cart functionality
+
+## Building for Production
+
+```
+pnpm build
+```
+
+## Starting Production Server
+
+```
+pnpm start
+```

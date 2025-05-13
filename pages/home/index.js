@@ -5,11 +5,6 @@ import { Products } from 'components/home/products'
 import { ProductDetails } from 'components/home/products-details'
 import { ClientOnly } from 'components/isomorphic'
 import { LayoutMobile } from 'components/layout-mobile'
-import { fetchCmsQuery } from 'contentful/api'
-import {
-  footerEntryQuery,
-  studioFreightEntryQuery,
-} from 'contentful/queries/home.graphql'
 import { Layout } from 'layouts/default'
 import Shopify from 'lib/shopify'
 import dynamic from 'next/dynamic'
@@ -22,7 +17,7 @@ const Gallery = dynamic(
   }
 )
 
-export default function Home({ studioFreight, footer, productsArray }) {
+export default function Home({ studioFreight, footerLinks, productsArray }) {
   const isDesktop = useMediaQuery('(min-width: 800px)')
   const isMobile = useMediaQuery('(max-width: 800px)')
 
@@ -34,7 +29,7 @@ export default function Home({ studioFreight, footer, productsArray }) {
         phone: studioFreight.phoneNumber,
         email: studioFreight.email,
       }}
-      footerLinks={footer.linksCollection.items}
+      footerLinks={footerLinks}
     >
       {isDesktop === true ? (
         <ClientOnly>
@@ -55,23 +50,114 @@ export default function Home({ studioFreight, footer, productsArray }) {
   )
 }
 
-export async function getStaticProps({ preview = false }) {
-  const [{ studioFreight }, { footer }] = await Promise.all([
-    fetchCmsQuery(studioFreightEntryQuery, {
-      preview,
-    }),
-    fetchCmsQuery(footerEntryQuery, {
-      preview,
-    }),
-  ])
+export async function getStaticProps() {
+  // Mock data to replace Contentful data
+  const studioFreight = {
+    principles: ['Quality', 'Design', 'Innovation'],
+    about: {
+      json: {
+        nodeType: 'document',
+        data: {},
+        content: [
+          {
+            nodeType: 'paragraph',
+            data: {},
+            content: [
+              {
+                nodeType: 'text',
+                value:
+                  'PHANTASY is an independent creative studio built on principle.',
+                marks: [],
+                data: {},
+              },
+            ],
+          },
+        ],
+      },
+    },
+    phoneNumber: '+1 (123) 456-7890',
+    email: 'hello@phantasy.studio',
+  }
 
-  const store = new Shopify()
-  const productsArray = await store.getAllProducts()
+  // Mock footer links
+  const footerLinks = [
+    { label: 'Instagram', href: 'https://instagram.com/phantasy' },
+    { label: 'Twitter', href: 'https://twitter.com/phantasy' },
+    { label: 'Contact', href: '/contact' },
+  ]
+
+  // Try to get products from Shopify if configured
+  let productsArray = []
+  try {
+    const store = new Shopify()
+    const products = await store.getAllProducts()
+    if (products) {
+      productsArray = products
+    }
+  } catch (error) {
+    console.log(
+      'Shopify not configured yet or error fetching products:',
+      error.message
+    )
+    // Mock product data when Shopify is not configured
+    productsArray = [
+      {
+        id: 'mock-product-1',
+        name: 'Sample Product 1',
+        price: '19.99',
+        images: [{ src: '/placeholder.jpg', alt: 'Sample Product 1' }],
+        slug: 'sample-product-1',
+        description: 'This is a sample product.',
+        inStock: true,
+        variants: [
+          {
+            id: 'variant-1-1',
+            size: 'S',
+            isAvailable: true,
+            price: '19.99',
+            availableQuantity: 10,
+          },
+          {
+            id: 'variant-1-2',
+            size: 'M',
+            isAvailable: true,
+            price: '19.99',
+            availableQuantity: 5,
+          },
+          {
+            id: 'variant-1-3',
+            size: 'L',
+            isAvailable: false,
+            price: '19.99',
+            availableQuantity: 0,
+          },
+        ],
+      },
+      {
+        id: 'mock-product-2',
+        name: 'Sample Product 2',
+        price: '29.99',
+        images: [{ src: '/placeholder.jpg', alt: 'Sample Product 2' }],
+        slug: 'sample-product-2',
+        description: 'This is another sample product.',
+        inStock: true,
+        variants: [
+          {
+            id: 'variant-2-1',
+            size: 'One Size',
+            isAvailable: true,
+            price: '29.99',
+            availableQuantity: 20,
+          },
+        ],
+      },
+    ]
+  }
 
   return {
     props: {
       studioFreight,
-      footer,
+      footerLinks,
       productsArray,
       id: 'home',
     },

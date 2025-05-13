@@ -26,6 +26,22 @@ export const ProductDetails = () => {
     addToCartRef.current?.classList.toggle(s['button-disabled'], toggle)
   }, [])
 
+  // If no product is selected yet, show a loading state or return null
+  if (!selectedProduct) {
+    return (
+      <section className={s['product-details']}>
+        <div className={s.heading}>
+          <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
+            Product detail
+          </p>
+        </div>
+        <div className={s['details-content']}>
+          <p className="p">Select a product to view details</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className={s['product-details']}>
       <div className={s.heading}>
@@ -115,7 +131,9 @@ export const ProductDetails = () => {
         <p className={cn(s.title, 'p text-muted text-uppercase text-bold')}>
           Choose your Fit
         </p>
-        {selectedProduct && (
+        {selectedProduct &&
+        selectedProduct.variants &&
+        selectedProduct.variants.length > 0 ? (
           <div className={s.options}>
             {selectedProduct.variants.map((variant, key) => (
               <button
@@ -134,6 +152,21 @@ export const ProductDetails = () => {
                 <p>{variant.size}</p>
               </button>
             ))}
+          </div>
+        ) : (
+          <div className={s.options}>
+            <button
+              onClick={async () => {
+                await cart.utils.addItemUI({
+                  merchandiseId: selectedProduct.id,
+                  quantity: 1,
+                })
+                setToggleCart(true)
+              }}
+              className={cn('p-s', s.option)}
+            >
+              <p>One Size</p>
+            </button>
           </div>
         )}
       </div>

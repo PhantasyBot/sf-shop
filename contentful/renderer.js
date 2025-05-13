@@ -5,6 +5,8 @@ import cn from 'clsx'
 import s from './renderer.module.scss'
 
 export const renderer = ({ json }) => {
+  if (!json) return null
+
   const document = json
 
   const options = {
@@ -35,5 +37,10 @@ export const renderer = ({ json }) => {
     },
   }
 
-  return documentToReactComponents(document, options)
+  try {
+    return documentToReactComponents(document, options)
+  } catch (error) {
+    console.error('Error rendering Contentful document:', error)
+    return <p className="p">Content unavailable</p>
+  }
 }
