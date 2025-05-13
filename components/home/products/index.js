@@ -6,6 +6,13 @@ import { useEffect } from 'react'
 import shallow from 'zustand/shallow'
 import s from './products.module.scss'
 
+// Placeholder items to fill empty space
+const PLACEHOLDER_ITEMS = [
+  { id: 'placeholder-1', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-2', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-3', name: 'COMING SOON', price: '--' },
+]
+
 export const Products = ({ products, isLoading = false, className }) => {
   const [selectedProduct, setSelectedProduct] = useStore(
     (state) => [state.selectedProduct, state.setSelectedProduct],
@@ -62,6 +69,10 @@ export const Products = ({ products, isLoading = false, className }) => {
     )
   }
 
+  // Combine actual products with placeholders
+  const displayedProducts = [...products]
+  const allProducts = [...displayedProducts, ...PLACEHOLDER_ITEMS]
+
   return (
     <section className={cn(s.products, className)}>
       <p className={cn(s.title, 'p text-bold text-uppercase text-muted')}>
@@ -69,25 +80,32 @@ export const Products = ({ products, isLoading = false, className }) => {
       </p>
       <ScrollableBox className={s.list}>
         <ul>
-          {products.map((product) => (
-            <li
-              key={product.id}
-              className={cn(
-                selectedProduct?.id === product.id && s.active,
-                s['list-item']
-              )}
-            >
-              <button
-                onClick={() => {
-                  logger.debug(`Product selected: ${product.name}`)
-                  setSelectedProduct(product)
-                }}
+          {allProducts.map((product, index) => {
+            const isPlaceholder = index >= displayedProducts.length
+            return (
+              <li
+                key={product.id}
+                className={cn(
+                  selectedProduct?.id === product.id && s.active,
+                  s['list-item'],
+                  isPlaceholder && s.placeholder
+                )}
               >
-                <p className="p text-bold text-uppercase">{product.name}</p>
-                <p className="p-xs text-uppercase">{product.price}$</p>
-              </button>
-            </li>
-          ))}
+                <button
+                  onClick={() => {
+                    if (!isPlaceholder) {
+                      logger.debug(`Product selected: ${product.name}`)
+                      setSelectedProduct(product)
+                    }
+                  }}
+                  disabled={isPlaceholder}
+                >
+                  <p className="p text-bold text-uppercase">{product.name}</p>
+                  <p className="p-xs text-uppercase">{product.price}$</p>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </ScrollableBox>
     </section>

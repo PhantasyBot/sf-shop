@@ -21,8 +21,11 @@
     border-bottom: 1px solid var(--grey);
     padding-bottom: 0;
     margin-bottom: 0;
-    overflow: visible;
-    height: auto;
+    overflow: hidden;
+    min-height: desktop-vw(230px);
+    max-height: desktop-vw(230px);
+    display: flex;
+    flex-direction: column;
   }
 
   .productsSection {
@@ -30,6 +33,7 @@
     height: 100%;
     padding-top: 0;
     margin-top: 0;
+    align-self: flex-start;
   }
 
   .detailsSection {

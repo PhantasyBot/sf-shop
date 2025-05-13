@@ -31,29 +31,29 @@ export const CollectionSelector = ({ className }) => {
       <h2 className={cn('p text-bold text-uppercase text-muted', s.title)}>
         Collections
       </h2>
-      <div className={s.collections}>
-        {collections.map((collection) => (
-          <button
-            key={collection.id}
-            className={cn(
-              s.collection,
-              collection.id === selectedCollection?.id && s.active,
-              'p-s'
-            )}
-            onClick={() => setSelectedCollection(collection)}
-          >
-            {collection.title}
-          </button>
-        ))}
-      </div>
-
-      {selectedCollection?.description && (
-        <div className={s.collectionDescription}>
-          <ScrollableBox>
-            <p className="p">{selectedCollection.description}</p>
-          </ScrollableBox>
+      <ScrollableBox className={s.collectionContent}>
+        <div className={s.collections}>
+          {collections.map((collection) => (
+            <button
+              key={collection.id}
+              className={cn(
+                s.collection,
+                collection.id === selectedCollection?.id && s.active,
+                'p-s'
+              )}
+              onClick={() => setSelectedCollection(collection)}
+            >
+              {collection.title}
+            </button>
+          ))}
         </div>
-      )}
+
+        {selectedCollection?.description && (
+          <div className={s.collectionDescription}>
+            <p className="p">{selectedCollection.description}</p>
+          </div>
+        )}
+      </ScrollableBox>
     </div>
   )
 }

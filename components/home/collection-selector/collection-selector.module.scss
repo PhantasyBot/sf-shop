@@ -1,8 +1,15 @@
 .collectionSelector {
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .title {
-    margin-bottom: desktop-vw(16px);
+    margin-bottom: desktop-vw(12px);
+  }
+
+  .collectionContent {
+    flex: 1;
   }
 
   .collections {
@@ -31,12 +38,11 @@
   }
 
   .collectionDescription {
-    margin-top: desktop-vw(16px);
-    padding: desktop-vw(16px);
+    margin-top: desktop-vw(12px);
+    padding: desktop-vw(12px);
     border-radius: desktop-vw(8px);
     background-color: rgba(var(--green-rgb), 0.05);
-    max-height: desktop-vw(200px);
     overflow: hidden;
-    margin-bottom: desktop-vw(16px);
+    margin-bottom: desktop-vw(8px);
   }
 }

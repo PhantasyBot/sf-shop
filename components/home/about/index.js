@@ -17,9 +17,7 @@ export const About = ({ data, className }) => {
         {data && data.json ? (
           renderer(data)
         ) : (
-          <p className="p">
-            PHANTASY is an independent creative studio built on principle.
-          </p>
+          <p className="p">PHANTASY Merchandise Store.</p>
         )}
       </ScrollableBox>
 

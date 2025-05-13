@@ -165,7 +165,7 @@ export async function getStaticProps() {
               {
                 nodeType: 'text',
                 value:
-                  'PHANTASY is an independent creative studio built on principle.',
+                  'PHANTASY is an gaming & entertainment studio focused on interactive experiences with AI companions.\n\n\n Browse our store and support your favorite AI V-Tuber.',
                 marks: [],
                 data: {},
               },
