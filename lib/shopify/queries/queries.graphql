@@ -1,7 +1,7 @@
 #import "../fragments/product.graphql"
 #import "../fragments/images.graphql"
 
-query allProducts($query: String!) {
+query allProducts($query: String = "") {
   products(first: 10, query: $query) {
     edges {
       node {

@@ -1,0 +1,44 @@
+query simpleProducts($query: String = "") {
+  products(first: 10, query: $query) {
+    edges {
+      node {
+        id
+        title
+        description
+        handle
+        availableForSale
+        priceRange {
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+        images(first: 5) {
+          edges {
+            node {
+              originalSrc
+              altText
+            }
+          }
+        }
+        variants(first: 10) {
+          edges {
+            node {
+              id
+              title
+              availableForSale
+              priceV2 {
+                amount
+                currencyCode
+              }
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

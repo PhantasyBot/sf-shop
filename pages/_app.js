@@ -7,6 +7,7 @@ import { useInitCart } from 'hooks/use-cart'
 import { GTM_ID } from 'lib/analytics'
 import { useStore } from 'lib/store'
 import { ProjectProvider, RafDriverProvider } from 'lib/theatre'
+import logger from 'lib/utils/logger'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import { useEffect } from 'react'
@@ -18,6 +19,14 @@ const Noise = dynamic(
     ssr: false,
   }
 )
+
+// Direct console log for debugging environment variables
+console.log('DIRECT LOG - Environment variables:')
+console.log(
+  'NEXT_PUBLIC_SHOPIFY_DOMAIN:',
+  process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN
+)
+console.log('NEXT_PUBLIC_LOG_LEVEL:', process.env.NEXT_PUBLIC_LOG_LEVEL)
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -42,6 +51,23 @@ function MyApp({ Component, pageProps }) {
   const navIsOpened = useStore(({ navIsOpened }) => navIsOpened)
 
   useEffect(() => {
+    // Test if logger is working in useEffect
+    console.log('DIRECT LOG - Testing logger in useEffect')
+    logger.debug('DEBUG LOG - Testing logger debug level')
+    logger.info('INFO LOG - Testing logger info level')
+    logger.warn('WARN LOG - Testing logger warn level')
+    logger.error('ERROR LOG - Testing logger error level')
+
+    // Test direct console.log with Shopify credentials
+    console.log(
+      'DIRECT LOG - Shopify domain:',
+      process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN
+    )
+    console.log(
+      'DIRECT LOG - Has Shopify token:',
+      !!process.env.NEXT_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    )
+
     if (navIsOpened) {
       lenis?.stop()
     } else {

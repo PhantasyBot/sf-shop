@@ -97,6 +97,15 @@ export async function getStaticProps() {
 
     // Log environment variables (masked)
     logger.info('Environment variables:')
+    console.log('DIRECT LOG - Environment variables:')
+    console.log(
+      `NEXT_PUBLIC_SHOPIFY_DOMAIN: ${
+        process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || 'NOT SET'
+      }`
+    )
+    console.log(
+      `NEXT_PUBLIC_LOG_LEVEL: ${process.env.NEXT_PUBLIC_LOG_LEVEL || 'NOT SET'}`
+    )
     logger.info(
       `NEXT_PUBLIC_SHOPIFY_DOMAIN: ${
         process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || 'NOT SET'
@@ -110,10 +119,39 @@ export async function getStaticProps() {
       }`
     )
 
+    // First test the API connection with a simple query
+    const isConnected = await store.testApiConnection()
+
+    if (!isConnected) {
+      logger.warn('Could not connect to Shopify API, using mock product data')
+      throw new Error('Failed to connect to Shopify API')
+    }
+
     logger.info('Fetching products from Shopify')
     const endTimer = logger.time('Fetching Shopify products')
-    const products = await store.getAllProducts()
+
+    // Try to get products with the simplified query first
+    console.log('First trying simplified products query')
+    let products = await store.getSimpleProducts()
+
+    // If simplified query returns no products, fall back to the original query
+    if (!products || products.length === 0) {
+      console.log(
+        'Simplified query returned no products, trying original query'
+      )
+      products = await store.getAllProducts()
+    }
+
     endTimer()
+
+    // Log the result for debugging
+    console.log('========== SHOPIFY PRODUCTS RESULT ==========')
+    console.log('Products found:', products ? products.length : 0)
+    if (products && products.length > 0) {
+      console.log('First product:', products[0].name)
+    } else {
+      console.log('No products found')
+    }
 
     if (products && products.length > 0) {
       logger.info(

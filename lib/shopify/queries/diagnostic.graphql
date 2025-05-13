@@ -1,0 +1,9 @@
+query shopifyApiTest {
+  shop {
+    name
+    primaryDomain {
+      url
+      host
+    }
+  }
+}
