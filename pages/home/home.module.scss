@@ -3,11 +3,11 @@
   height: 100%;
   padding: desktop-vw(18px) 0 desktop-vw(24px) 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr 2fr;
   grid-template-areas:
-    'about collections collections'
-    'about products products'
-    'about details details';
+    'about collections details'
+    'about products details'
+    'about products details';
 
   .aboutSection {
     grid-area: about;
@@ -19,7 +19,7 @@
   .collectionsSection {
     grid-area: collections;
     border-bottom: 1px solid var(--grey);
-    padding-bottom: desktop-vw(24px);
+    padding-bottom: desktop-vw(12px);
     overflow: visible;
     height: auto;
   }
@@ -32,6 +32,8 @@
   .detailsSection {
     grid-area: details;
     height: 100%;
+    border-left: 1px solid var(--grey);
+    padding-left: desktop-vw(24px);
   }
 
   > section {

@@ -5,4 +5,32 @@
     display: flex;
     padding-bottom: desktop-vh(24px);
   }
+
+  .description {
+    margin-bottom: desktop-vw(20px);
+  }
+
+  .collectionImage {
+    margin-top: desktop-vw(20px);
+    border-top: 1px solid var(--grey);
+    padding-top: desktop-vw(16px);
+
+    .imageTitle {
+      display: flex;
+      margin-bottom: desktop-vw(16px);
+    }
+
+    .imageContainer {
+      position: relative;
+      width: 100%;
+      height: desktop-vw(300px);
+
+      .image {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        border-radius: desktop-vw(8px);
+      }
+    }
+  }
 }

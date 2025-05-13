@@ -4,6 +4,37 @@ mutation cartCreation {
   cartCreate {
     cart {
       id
+      checkoutUrl
+      lines(first: 100) {
+        edges {
+          node {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  id
+                  title
+                  handle
+                }
+                image {
+                  originalSrc
+                  altText
+                }
+                priceV2 {
+                  amount
+                  currencyCode
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -12,6 +43,72 @@ mutation cartLinesAdd($lines: [CartLineInput!]!, $cartId: ID!) {
   cartLinesAdd(lines: $lines, cartId: $cartId) {
     cart {
       id
+      checkoutUrl
+      cost {
+        totalAmount {
+          amount
+          currencyCode
+        }
+        subtotalAmount {
+          amount
+          currencyCode
+        }
+      }
+      discountCodes {
+        applicable
+        code
+      }
+      lines(first: 100) {
+        edges {
+          node {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                product {
+                  id
+                  title
+                  handle
+                  variants(first: 10) {
+                    edges {
+                      node {
+                        id
+                        priceV2 {
+                          amount
+                          currencyCode
+                        }
+                        selectedOptions {
+                          name
+                          value
+                        }
+                      }
+                    }
+                  }
+                }
+                image {
+                  originalSrc
+                  altText
+                }
+                priceV2 {
+                  amount
+                  currencyCode
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+            sellingPlanAllocation {
+              sellingPlan {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
     }
     userErrors {
       code
@@ -25,6 +122,14 @@ mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
   cartLinesUpdate(cartId: $cartId, lines: $lines) {
     cart {
       id
+      lines(first: 100) {
+        edges {
+          node {
+            id
+            quantity
+          }
+        }
+      }
     }
     userErrors {
       code
@@ -38,6 +143,13 @@ mutation cartRemoveLineItem($cartId: ID!, $lineIds: [ID!]!) {
   cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
     cart {
       id
+      lines(first: 100) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }

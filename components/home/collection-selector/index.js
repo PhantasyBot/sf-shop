@@ -1,4 +1,5 @@
 import cn from 'clsx'
+import { ScrollableBox } from 'components/scrollable-box'
 import { useStore } from 'lib/store'
 import { useEffect } from 'react'
 import shallow from 'zustand/shallow'
@@ -45,6 +46,14 @@ export const CollectionSelector = ({ className }) => {
           </button>
         ))}
       </div>
+
+      {selectedCollection?.description && (
+        <div className={s.collectionDescription}>
+          <ScrollableBox>
+            <p className="p">{selectedCollection.description}</p>
+          </ScrollableBox>
+        </div>
+      )}
     </div>
   )
 }

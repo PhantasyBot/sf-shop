@@ -25,15 +25,22 @@ export function Gallery() {
   useOutsideClickEvent(contentRef, () => setGalleryVisible(false))
 
   useEffect(() => {
-    const escFunction = (event) => {
+    const keyHandler = (event) => {
       if (event.keyCode === 27) {
+        // ESC key
         setGalleryVisible(false)
+      } else if (event.keyCode === 37 && galleryVisible) {
+        // Left arrow key
+        goToPrevImage()
+      } else if (event.keyCode === 39 && galleryVisible) {
+        // Right arrow key
+        goToNextImage()
       }
     }
 
-    document.addEventListener('keydown', escFunction, false)
-    return () => document.removeEventListener('keydown', escFunction, false)
-  }, [])
+    document.addEventListener('keydown', keyHandler, false)
+    return () => document.removeEventListener('keydown', keyHandler, false)
+  }, [galleryVisible, selectedProduct])
 
   // Reset image index when gallery opens
   useEffect(() => {
@@ -114,9 +121,9 @@ export function Gallery() {
         {selectedProduct && selectedProduct.images && (
           <div key={'i'} ref={contentRef} className={s.imageContainer}>
             <Image
-              src={selectedProduct.images[currentImageIndex].src}
+              src={selectedProduct.images[currentImageIndex]?.src}
               alt={
-                selectedProduct.images[currentImageIndex].alt ||
+                selectedProduct.images[currentImageIndex]?.alt ||
                 selectedProduct.name
               }
               width={1038}

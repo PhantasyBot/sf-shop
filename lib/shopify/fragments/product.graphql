@@ -54,7 +54,6 @@ fragment variants on ProductVariant {
   id
   title
   availableForSale
-  quantityAvailable
   weight
   image {
     originalSrc
@@ -69,7 +68,6 @@ fragment variants on ProductVariant {
       edges {
         node {
           id
-          quantityAvailable
           ...options
           ...price
         }

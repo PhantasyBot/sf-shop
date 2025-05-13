@@ -184,8 +184,22 @@ export const useCart = () => {
     },
 
     addItemUI: async function addItemUI(props) {
-      await addItem(props)
-      await mutate('/api/cart/fetch')
+      try {
+        const response = await addItem(props)
+
+        // Force immediate refetching of cart data after adding item
+        const cartData = await cartFetcher()
+
+        // Explicitly update the SWR cache with the latest data
+        await mutate('/api/cart/fetch', cartData, false)
+
+        return response
+      } catch (error) {
+        console.error('Error adding item to cart:', error)
+        // Refresh cart data anyway to ensure consistency
+        await mutate('/api/cart/fetch')
+        throw error
+      }
     },
 
     updateItemQuantityUI: async function updateItemQuantityUI(

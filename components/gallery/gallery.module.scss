@@ -48,16 +48,25 @@
     .navButton {
       cursor: pointer;
       color: var(--green);
-      transition: opacity 0.3s ease;
+      transition: all 0.3s ease;
+      padding: desktop-vw(8px) desktop-vw(12px);
+      border: 1px solid var(--green);
+      border-radius: desktop-vw(4px);
+      background: transparent;
 
       &:hover {
-        opacity: 0.8;
+        background: rgba(var(--green-rgb), 0.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
       }
     }
 
     .counter {
       color: var(--green);
       font-size: 14px;
+      margin: 0 desktop-vw(10px);
     }
   }
 
