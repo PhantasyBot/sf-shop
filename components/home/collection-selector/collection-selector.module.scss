@@ -5,21 +5,21 @@
   flex-direction: column;
 
   .title {
-    margin-bottom: desktop-vw(12px);
+    margin-bottom: desktop-vw(8px);
   }
 
   .collectionContent {
-    flex: 1;
+    // flex: 1; /* This was removed to prevent unnecessary expansion */
   }
 
   .collections {
     display: flex;
     flex-wrap: wrap;
-    gap: desktop-vw(12px);
+    gap: desktop-vw(8px);
   }
 
   .collection {
-    padding: desktop-vw(8px) desktop-vw(12px);
+    padding: desktop-vw(6px) desktop-vw(10px);
     border: 1px solid var(--green);
     border-radius: desktop-vw(4px);
     background: transparent;
@@ -38,11 +38,12 @@
   }
 
   .collectionDescription {
-    margin-top: desktop-vw(12px);
-    padding: desktop-vw(12px);
-    border-radius: desktop-vw(8px);
+    margin-top: desktop-vw(8px);
+    padding: desktop-vw(8px);
+    border-radius: desktop-vw(6px);
     background-color: rgba(var(--green-rgb), 0.05);
-    overflow: hidden;
+    overflow: hidden; /* Kept to prevent accidental overflow */
     margin-bottom: 0;
+    /* Text truncation and max-height removed to show full description */
   }
 }

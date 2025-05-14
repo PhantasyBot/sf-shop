@@ -11,6 +11,10 @@ const PLACEHOLDER_ITEMS = [
   { id: 'placeholder-1', name: 'COMING SOON', price: '--' },
   { id: 'placeholder-2', name: 'COMING SOON', price: '--' },
   { id: 'placeholder-3', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-4', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-5', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-6', name: 'COMING SOON', price: '--' },
+  { id: 'placeholder-7', name: 'COMING SOON', price: '--' },
 ]
 
 export const Products = ({ products, isLoading = false, className }) => {
